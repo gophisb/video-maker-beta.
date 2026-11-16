@@ -20,7 +20,7 @@ permissions:
 
 concurrency:
   group: midad-beta-android
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build-debug-apk:
@@ -49,7 +49,11 @@ jobs:
           test -d "$ANDROID_HOME"
           SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
           test -x "$SDKMANAGER"
+          set +o pipefail
           yes | "$SDKMANAGER" --licenses >/dev/null
+          sdkmanager_status=${PIPESTATUS[1]}
+          set -o pipefail
+          test "$sdkmanager_status" -eq 0
           "$SDKMANAGER" --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
           echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
 
