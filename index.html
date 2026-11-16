@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101722"><meta name="description" content="صانع فيديو عربي يعمل محلياً في المتصفح">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css"><title>مِداد — صانع الفيديو</title>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="./"><span class="brand-mark">م</span><span><b>مِداد</b><small>استوديو الفيديو</small></span></a><div class="top-actions"><span class="privacy"><i></i> ملفاتك تبقى على جهازك</span><button id="helpBtn" class="icon-btn" aria-label="معلومات">؟</button></div></header>
+<main class="shell">
+<section class="intro"><div><p class="eyebrow">استوديو إبداعي بسيط</p><h1>حوّل صورك إلى <em>حكاية متحركة</em></h1><p class="sub">رتّب الصور، أضف كلماتك وصوتك، ثم صدّر فيديوك بجودة عالية.</p></div><div class="step-chip"><span>01</span> أنشئ مشروعك</div></section>
+<div class="workspace">
+<section class="preview-panel panel">
+<div class="panel-head"><div><h2>المعاينة</h2><p>مشاهدة شكل الفيديو قبل التصدير</p></div><span id="previewState" class="status">جاهز</span></div>
+<div class="preview-wrap"><div class="preview-frame" id="previewFrame"><canvas id="stage" width="720" height="1280"></canvas><div id="emptyPreview" class="empty-preview"><div class="empty-icon">✦</div><b>ابدأ بصورك أو بنص جديد</b><span>ستظهر معاينتك هنا</span></div></div></div>
+<div class="preview-controls"><button id="playBtn" class="btn btn-quiet" disabled>▶ معاينة</button><span id="timeLabel" class="time-label">00:00 / 00:00</span><button id="stopBtn" class="btn btn-quiet" disabled>■ إيقاف</button></div>
+</section>
+<aside class="side-panel">
+<section class="panel settings-panel"><div class="panel-head"><div><h2>إعدادات المشروع</h2><p>اضبط مقاس الفيديو وإيقاعه</p></div><span class="number">01</span></div>
+<div class="field-grid"><label class="field"><span>أبعاد الفيديو</span><select id="ratio"><option value="9:16">عمودي · 9:16</option><option value="16:9">أفقي · 16:9</option><option value="1:1">مربع · 1:1</option></select></label><label class="field"><span>معدل الإطارات</span><select id="fps"><option value="24">24 إطار/ث</option><option value="30" selected>30 إطار/ث</option></select></label></div>
+<label class="field"><span>مدة الانتقال <output id="transitionOut">0.5 ث</output></span><input id="transition" type="range" min="0" max="1.5" step=".1" value=".5"></label>
+<div class="field"><span>الموسيقى الخلفية <small>اختياري · MP3 أو M4A أو WAV</small></span><label class="file-pick" for="audioFile"><span>♫</span><b id="audioName">اختر ملفاً صوتياً</b><i>استعراض</i></label><input id="audioFile" type="file" accept="audio/*" hidden><button id="removeAudio" class="text-btn" hidden>إزالة الصوت</button></div>
+</section>
+<section class="panel editor-panel" id="editorPanel"><div class="panel-head"><div><h2>تحرير الشريحة</h2><p id="selectedLabel">اختر شريحة لتعديلها</p></div><span class="number">02</span></div>
+<div id="editorEmpty" class="editor-empty">حدد شريحة من الشريط لفتح أدواتها.</div>
+<div id="editorFields" hidden><label class="field"><span>النص الظاهر على الفيديو</span><textarea id="slideText" rows="3" placeholder="اكتب عبارة جميلة..."></textarea></label>
+<div class="field-grid"><label class="field"><span>مدة الشريحة <output id="durationOut">3 ث</output></span><input id="duration" type="range" min="1" max="12" step=".5" value="3"></label><label class="field"><span>حركة الصورة</span><select id="motion"><option value="zoomIn">تقريب تدريجي</option><option value="zoomOut">إبعاد تدريجي</option><option value="panLeft">تحريك لليسار</option><option value="panRight">تحريك لليمين</option><option value="none">بلا حركة</option></select></label></div>
+<label class="field" id="bgField"><span>لون خلفية الشريحة النصية</span><input id="bgColor" type="color" value="#182438"></label>
+<div class="edit-actions"><button id="moveLeft" class="btn btn-quiet">← تقديم</button><button id="moveRight" class="btn btn-quiet">تأخير →</button><button id="deleteSlide" class="btn btn-danger">حذف</button></div></div>
+</section>
+</aside>
+</div>
+<section class="panel timeline-panel"><div class="panel-head"><div><h2>قصة الفيديو</h2><p>أضف الشرائح واسحبها لترتيبها</p></div><span id="slideCount" class="count">0 شرائح</span></div>
+<div id="timeline" class="timeline"><div class="timeline-empty">لم تضف أي شرائح بعد. ابدأ بإضافة صورك أو شريحة نصية.</div></div>
+<div class="add-actions"><button id="addImages" class="btn btn-primary"><span>＋</span> إضافة صور</button><button id="addText" class="btn btn-outline"><span>Ｔ</span> شريحة نصية</button><input id="imageFiles" type="file" accept="image/*" multiple hidden></div>
+</section>
+<section class="export-panel"><div class="export-copy"><span class="export-icon">↗</span><div><b>جاهز لإخراج عملك؟</b><small>يُنشأ الفيديو على جهازك دون رفع ملفاتك.</small></div></div><div class="export-actions"><button id="exportBtn" class="btn btn-export" disabled>تصدير الفيديو <span>↗</span></button></div><div id="progressWrap" class="progress-wrap" hidden><div class="progress-meta"><span id="progressText">جارٍ تجهيز الفيديو…</span><b id="progressPercent">0%</b></div><div class="progress-track"><i id="progressBar"></i></div></div><p id="message" class="message" role="status" aria-live="polite">أضف شريحة واحدة على الأقل للبدء.</p></section>
+<section id="resultPanel" class="panel result-panel" hidden><div class="panel-head"><div><h2>فيديوك جاهز</h2><p id="resultInfo">اكتمل التصدير</p></div><span class="result-check">✓</span></div><video id="resultVideo" controls playsinline></video><a id="downloadBtn" class="btn btn-primary download-btn" download="midad-video.webm">تنزيل الفيديو ↓</a></section>
+<footer><span>مِداد · مساحة لصناعة الحكايات</span><span>تعمل المعالجة محلياً على جهازك</span></footer>
+</main>
+<dialog id="helpDialog"><form method="dialog"><button class="dialog-close" aria-label="إغلاق">×</button><h2>مرحباً بك في مِداد</h2><p>أضف صوراً أو شرائح نصية، ثم اختر أي شريحة لتعديل نصها ومدتها وحركتها. استخدم المعاينة لمشاهدة الفيديو، ثم اضغط «تصدير الفيديو».</p><p><b>ملاحظة:</b> يعتمد نوع الملف النهائي على دعم المتصفح. قد ينتج Chrome على بعض الهواتف ملف WebM بدلاً من MP4. أبقِ الصفحة مفتوحة والشاشة مضاءة أثناء التصدير.</p><button class="btn btn-primary" value="close">فهمت</button></form></dialog>
+<script src="./app.js" defer></script><script>if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));</script>
+</body></html>
